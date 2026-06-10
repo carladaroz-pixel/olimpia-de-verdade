@@ -99,7 +99,7 @@ function Home({ setPage }: { setPage: (p: string) => void }) {
       </section>
 
       <section className="max-w-6xl mx-auto py-16 px-4 grid md:grid-cols-2 gap-8 items-center">
-        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="Luciano" className="rounded-full w-64 h-64 mx-auto object-cover shadow-lg" />
+        <img src="/Luciano%203.jpg" alt="Luciano" className="rounded-full w-64 h-64 mx-auto object-cover shadow-lg" />
         <div>
           <h2 className="text-3xl font-bold text-orange-700">Conheça Luciano Zangirolami</h2>
           <p className="mt-4 text-gray-600">Morador de Olímpia há mais de 15 anos, Luciano conhece cada cantinho da cidade. Ele preparou esse guia com os melhores lugares, cupons exclusivos e dicas que só um morador de verdade pode dar.</p>
