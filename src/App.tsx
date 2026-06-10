@@ -1,155 +1,245 @@
 import { useState } from 'react'
 
-type Place = { nome: string; categoria: string; descricao: string; preco?: string; imagem: string }
-type Food = { nome: string; categoria: string; descricao: string; preco?: string; imagem: string }
-type Operator = { nome: string; logo: string; especialidade: string; whatsapp: string; imagem: string }
-type Benefit = { titulo: string; descricao: string; icone: string }
-type Plan = { nome: string; preco: string; beneficios: string[]; popular?: boolean }
-
 const WHATSAPP = '55179988311133'
+const EMAIL = 'contato@olimpiadeverdade.com.br'
+
+type Place = {
+  nome: string
+  categoria: string
+  descricao: string
+  preco: string
+  imagem: string
+  verificado: boolean
+  selo?: string
+}
+type Food = {
+  nome: string
+  categoria: string
+  descricao: string
+  preco: string
+  imagem: string
+  verificado: boolean
+  selo?: string
+}
+type Cupom = {
+  parceiro: string
+  nome: string
+  desconto: string
+  codigo: string
+  valido: string
+  cor: string
+}
+type Evento = {
+  mes: string
+  dia: string
+  categoria: string
+  titulo: string
+  local: string
+  hora: string
+}
+type Post = {
+  titulo: string
+  descricao: string
+  categoria: string
+  imagem: string
+}
+type Video = {
+  titulo: string
+  duracao: string
+  thumbnail: string
+}
 
 const ondeFicar: Place[] = [
-  { nome: 'Thermas Park Resort', categoria: 'Resort', descricao: 'Acomodações premium ao lado do parque aquático.', preco: 'R$ 890/diária', imagem: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600' },
-  { nome: 'Hot Beach Suites', categoria: 'Resort', descricao: 'Suítes modernas com acesso ao complexo Hot Beach.', preco: 'R$ 740/diária', imagem: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600' },
-  { nome: 'Pousada Águas Claras', categoria: 'Pousada', descricao: 'Tranquilidade e conforto no centro de Olímpia.', preco: 'R$ 320/diária', imagem: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600' },
-  { nome: 'Hotel Central Olímpia', categoria: 'Hotel', descricao: 'Localização privilegiada e ótimo custo-benefício.', preco: 'R$ 280/diária', imagem: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600' },
-  { nome: 'Enjoy Olímpia Park Resort', categoria: 'Resort', descricao: 'Diversão garantida para toda família.', preco: 'R$ 690/diária', imagem: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600' },
-  { nome: 'Recanto Tropical Pousada', categoria: 'Pousada', descricao: 'Ambiente rústico e acolhedor.', preco: 'R$ 260/diária', imagem: 'https://images.unsplash.com/photo-1585543805890-6051f7829f98?w=600' },
+  { nome: 'Thermas Park Resort', categoria: 'Resort', descricao: 'Acomodações premium ao lado do parque aquático.', preco: 'R$ 890/diária', imagem: 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600', verificado: true },
+  { nome: 'Hot Beach Suites', categoria: 'Resort', descricao: 'Suítes modernas com acesso ao complexo Hot Beach.', preco: 'R$ 740/diária', imagem: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600', verificado: true },
+  { nome: 'Pousada Águas Claras', categoria: 'Pousada', descricao: 'Tranquilidade e conforto no centro.', preco: 'R$ 320/diária', imagem: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600', verificado: true },
+  { nome: 'Hotel Central Olímpia', categoria: 'Hotel', descricao: 'Localização privilegiada e ótimo custo-benefício.', preco: 'R$ 280/diária', imagem: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600', verificado: false },
+  { nome: 'Enjoy Olímpia Park Resort', categoria: 'Resort', descricao: 'Diversão garantida para toda família.', preco: 'R$ 690/diária', imagem: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600', verificado: true },
+  { nome: 'Recanto Tropical Pousada', categoria: 'Pousada', descricao: 'Ambiente rústico e acolhedor.', preco: 'R$ 260/diária', imagem: 'https://images.unsplash.com/photo-1585543805890-6051f7829f98?w=600', verificado: false },
 ]
 
 const ondeComer: Food[] = [
-  { nome: 'Churrascaria Boi de Ouro', categoria: 'Churrascaria', descricao: 'A melhor carne da cidade. Top 1 de Olímpia.', preco: '$$$', imagem: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600' },
-  { nome: 'Cantina da Nona', categoria: 'Restaurante', descricao: 'Comida caseira com filas todo dia.', preco: '$$', imagem: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600' },
-  { nome: 'Café Colonial Olímpia', categoria: 'Cafeteria', descricao: 'Café colonial completo aos domingos.', preco: '$$', imagem: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600' },
-  { nome: 'Bar do Porto', categoria: 'Bar', descricao: 'Porções generosas e cerveja gelada.', preco: '$$', imagem: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600' },
-  { nome: 'Gelateria Tropicana', categoria: 'Sorveteria', descricao: 'Sabores tropicais incríveis.', preco: '$', imagem: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600' },
-  { nome: 'Restaurante Mirante', categoria: 'Restaurante', descricao: 'Vista panorâmica e alta gastronomia.', preco: '$$$', imagem: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600' },
+  { nome: 'Churrascaria Boi de Ouro', categoria: 'Churrascaria', descricao: 'A melhor carne da cidade.', preco: '$$$', imagem: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600', verificado: true, selo: '🥇 Top 1 da cidade' },
+  { nome: 'Cantina da Nona', categoria: 'Restaurante', descricao: 'Comida caseira com filas todo dia.', preco: '$$', imagem: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600', verificado: true, selo: '🔥 Mais visitado' },
+  { nome: 'Café Colonial Olímpia', categoria: 'Cafeteria', descricao: 'Café colonial completo aos domingos.', preco: '$$', imagem: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600', verificado: false },
+  { nome: 'Bar do Porto', categoria: 'Bar', descricao: 'Porções generosas e cerveja gelada.', preco: '$$', imagem: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600', verificado: false },
+  { nome: 'Gelateria Tropicana', categoria: 'Sorveteria', descricao: 'Sabores tropicais incríveis.', preco: '$', imagem: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600', verificado: false },
+  { nome: 'Restaurante Mirante', categoria: 'Restaurante', descricao: 'Vista panorâmica e alta gastronomia.', preco: '$$$', imagem: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600', verificado: true, selo: '🔥 Mais visitado' },
 ]
 
-const operadoras: Operator[] = [
-  { nome: 'Turismo Olímpia', logo: '🚐', especialidade: 'Pacotes para parques', whatsapp: WHATSAPP, imagem: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600' },
-  { nome: 'Pacote Fácil', logo: '🎫', especialidade: 'Ingressos e transfers', whatsapp: WHATSAPP, imagem: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600' },
-  { nome: 'Trip Olímpia', logo: '✈️', especialidade: 'Excursões em grupo', whatsapp: WHATSAPP, imagem: 'https://images.unsplash.com/photo-1436491865332-7a61a109bb05?w=600' },
-  { nome: 'Viva Olímpia', logo: '🏨', especialidade: 'Hospedagem + parques', whatsapp: WHATSAPP, imagem: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600' },
+const cupons: Cupom[] = [
+  { parceiro: 'Thermas dos Laranjais', nome: 'TL', desconto: '15% OFF no ingresso família', codigo: 'OLIMPIA15', valido: '31/12/2026', cor: 'from-blue-400 to-blue-600' },
+  { parceiro: 'Hot Beach', nome: 'HB', desconto: 'Compre 3 ingressos, leve 4', codigo: 'HOT4X3', valido: '30/06/2026', cor: 'from-orange-400 to-red-500' },
+  { parceiro: 'Churrascaria Boi de Ouro', nome: 'CB', desconto: 'Sobremesa grátis', codigo: 'DOCE2026', valido: '31/12/2026', cor: 'from-amber-500 to-yellow-600' },
+  { parceiro: 'Vale dos Dinossauros', nome: 'VD', desconto: '20% OFF no tour', codigo: 'DINO20', valido: '30/09/2026', cor: 'from-green-500 to-emerald-600' },
+  { parceiro: 'Museu de Cera', nome: 'MC', desconto: 'Criança paga meia', codigo: 'KIDS50', valido: '31/12/2026', cor: 'from-purple-500 to-pink-500' },
+  { parceiro: 'Pousada Recanto', nome: 'PR', desconto: '3ª diária por 50%', codigo: 'STAY3', valido: '31/08/2026', cor: 'from-teal-400 to-cyan-500' },
 ]
 
-const beneficios: Benefit[] = [
-  { titulo: 'Sobremesa grátis', descricao: 'Na compra de um prato principal em restaurantes parceiros.', icone: '🍰' },
-  { titulo: 'Drink em dobro', descricao: 'Compre um drink e ganhe outro em bares selecionados.', icone: '🍹' },
-  { titulo: '15% OFF em ingressos', descricao: 'Desconto em parques aquáticos parceiros.', icone: '🎢' },
-  { titulo: 'Upgrade de quarto', descricao: 'Sujeito a disponibilidade em hotéis selecionados.', icone: '⭐' },
-  { titulo: 'Tour guiado grátis', descricao: 'Para grupos acima de 4 pessoas.', icone: '🗺️' },
-  { titulo: 'Voucher de estacionamento', descricao: 'Válido nos parques e centros de eventos.', icone: '🅿️' },
+const eventos: Evento[] = [
+  { mes: 'JUN', dia: '12', categoria: 'Música', titulo: 'Festival de Inverno Olímpia', local: 'Centro de Eventos', hora: '18:00' },
+  { mes: 'JUL', dia: '20', categoria: 'Gastronomia', titulo: 'Encontro Gastronômico', local: 'Praça Central', hora: '12:00' },
+  { mes: 'AGO', dia: '05', categoria: 'Cultura', titulo: 'Feira de Artesanato', local: 'Parque da Cidade', hora: '09:00' },
+  { mes: 'SET', dia: '15', categoria: 'Cidade', titulo: 'Aniversário de Olímpia', local: 'Centro Histórico', hora: '10:00' },
 ]
 
-const planos: Plan[] = [
-  { nome: 'Essencial', preco: 'R$99/mês', beneficios: ['Ficha no portal', '1 foto', 'Contato direto'] },
-  { nome: 'Destaque', preco: 'R$199/mês', beneficios: ['Ficha destacada', '10 fotos', 'Cupom de desconto', '1 post no blog'], popular: true },
-  { nome: 'Premium', preco: 'R$399/mês', beneficios: ['Topo do diretório', 'Fotos ilimitadas', 'Cupons + vídeo', '3 posts no blog', 'Gestor dedicado'] },
+const posts: Post[] = [
+  { titulo: 'Roteiro de 3 dias em Olímpia', descricao: 'Como aproveitar ao máximo um fim de semana prolongado na cidade das águas.', categoria: 'Roteiro', imagem: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400' },
+  { titulo: 'Como economizar nos parques', descricao: 'Dicas práticas pra gastar menos sem abrir mão da diversão.', categoria: 'Economia', imagem: 'https://images.unsplash.com/photo-1553729459-afe8a2f19f7c?w=400' },
+  { titulo: '5 lugares que só morador conhece', descricao: 'Cantos escondidos e experiências autênticas longe do óbvio.', categoria: 'Dicas', imagem: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400' },
+]
+
+const videos: Video[] = [
+  { titulo: 'Tour completo Thermas dos Laranjais', duracao: '12:34', thumbnail: 'https://images.unsplash.com/photo-1518384511164-5d0d4c6d5b69?w=300' },
+  { titulo: 'Hot Beach vale a pena? Review', duracao: '08:21', thumbnail: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=300' },
+  { titulo: 'Onde comer barato em Olímpia', duracao: '06:45', thumbnail: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300' },
+  { titulo: 'Passeios fora do óbvio', duracao: '15:02', thumbnail: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=300' },
 ]
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home')
-  const navigate = (page: string) => setCurrentPage(page)
+  const [page, setPage] = useState('home')
+  const [filtroFicar, setFiltroFicar] = useState('Todos')
+  const [filtroComer, setFiltroComer] = useState('Todos')
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home': return <Home navigate={navigate} />
-      case 'onde-ficar': return <OndeFicar data={ondeFicar} />
-      case 'onde-comer': return <OndeComer data={ondeComer} />
-      case 'operadoras': return <Operadoras data={operadoras} />
-      case 'beneficios': return <Beneficios data={beneficios} />
-      case 'seja-parceiro': return <SejaParceiro planos={planos} />
-      case 'contato': return <Contato />
-      default: return <Home navigate={navigate} />
-    }
-  }
+  const categoriasFicar = ['Todos', 'Resort', 'Hotel', 'Pousada', 'Temporada']
+  const categoriasComer = ['Todos', 'Restaurante', 'Bar', 'Cafeteria', 'Churrascaria', 'Sorveteria']
+
+  const filtrarFicar = filtroFicar === 'Todos' ? ondeFicar : ondeFicar.filter(p => p.categoria === filtroFicar)
+  const filtrarComer = filtroComer === 'Todos' ? ondeComer : ondeComer.filter(f => f.categoria === filtroComer)
 
   return (
-    <div className="flex flex-col min-h-screen bg-white font-sans">
-      <nav className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 text-white shadow-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <button onClick={() => navigate('home')} className="text-2xl font-extrabold tracking-tight hover:scale-105 transition">🌴 Olímpia de Verdade</button>
-          <div className="hidden md:flex gap-6 text-sm font-semibold">
-            {['onde-ficar','onde-comer','operadoras','beneficios','seja-parceiro','contato'].map(p => (
-              <button key={p} onClick={() => navigate(p)} className="hover:underline capitalize">{p.replace('-',' ')}</button>
-            ))}
+    <div className="font-sans bg-white text-gray-800">
+      {/* Navbar */}
+      <nav className="bg-white shadow-md sticky top-0 z-50 border-b border-orange-100">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+          <button onClick={() => setPage('home')} className="text-2xl font-black text-orange-600">Olímpia de Verdade</button>
+          <div className="hidden md:flex gap-6 text-sm font-semibold text-gray-700">
+            <button onClick={() => setPage('onde-ficar')} className="hover:text-orange-600">Onde Ficar</button>
+            <button onClick={() => setPage('onde-comer')} className="hover:text-orange-600">Onde Comer</button>
+            <button onClick={() => setPage('cupons')} className="hover:text-orange-600">Cupons</button>
+            <button onClick={() => setPage('eventos')} className="hover:text-orange-600">Eventos</button>
+            <button onClick={() => setPage('blog')} className="hover:text-orange-600">Blog</button>
+            <button onClick={() => setPage('videos')} className="hover:text-orange-600">Vídeos</button>
+            <button onClick={() => setPage('sobre')} className="hover:text-orange-600">Sobre</button>
+            <button onClick={() => setPage('parceiro')} className="hover:text-orange-600">Seja Parceiro</button>
           </div>
-          <button className="md:hidden text-2xl">☰</button>
         </div>
       </nav>
 
-      <main className="flex-1">{renderPage()}</main>
+      {/* Conteúdo */}
+      <main>
+        {page === 'home' && <Home setPage={setPage} />}
+        {page === 'onde-ficar' && <OndeFicar data={filtrarFicar} filtro={filtroFicar} setFiltro={setFiltroFicar} categorias={categoriasFicar} />}
+        {page === 'onde-comer' && <OndeComer data={filtrarComer} filtro={filtroComer} setFiltro={setFiltroComer} categorias={categoriasComer} />}
+        {page === 'cupons' && <Cupons data={cupons} />}
+        {page === 'eventos' && <Eventos data={eventos} />}
+        {page === 'blog' && <Blog data={posts} />}
+        {page === 'videos' && <Videos data={videos} />}
+        {page === 'sobre' && <Sobre />}
+        {page === 'parceiro' && <Parceiro />}
+      </main>
 
-      <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-10">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-2xl font-bold">🌴 Olímpia de Verdade</p>
-          <p className="text-sm mt-2 text-gray-300">O guia local mais completo de Olímpia-SP.</p>
-          <p className="text-sm mt-2">Fale com o Luciano: <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline font-semibold">(17) 98831-1133</a></p>
-          <p className="text-xs mt-4 text-gray-500">© 2026 Olímpia de Verdade · Feito por quem nasceu aqui</p>
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 mt-16">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
+          <div>
+            <p className="text-2xl font-black">Olímpia de Verdade</p>
+            <p className="text-sm text-gray-400 mt-2">O guia local mais completo de Olímpia-SP.</p>
+          </div>
+          <div>
+            <p className="font-bold mb-2">Explorar</p>
+            <div className="grid grid-cols-2 gap-1 text-sm text-gray-400">
+              <button onClick={() => setPage('onde-ficar')} className="hover:text-white text-left">Onde Ficar</button>
+              <button onClick={() => setPage('onde-comer')} className="hover:text-white text-left">Onde Comer</button>
+              <button onClick={() => setPage('cupons')} className="hover:text-white text-left">Cupons</button>
+              <button onClick={() => setPage('eventos')} className="hover:text-white text-left">Eventos</button>
+              <button onClick={() => setPage('blog')} className="hover:text-white text-left">Blog</button>
+              <button onClick={() => setPage('videos')} className="hover:text-white text-left">Vídeos</button>
+            </div>
+          </div>
+          <div>
+            <p className="font-bold mb-2">Contato</p>
+            <p className="text-sm text-gray-400">WhatsApp: (17) 98831-1133</p>
+            <p className="text-sm text-gray-400">contato@olimpiadeverdade.com.br</p>
+          </div>
         </div>
+        <p className="text-center text-xs text-gray-600 mt-8">© 2026 Olímpia de Verdade · Feito por quem nasceu aqui</p>
       </footer>
 
-      <a href={`https://wa.me/${WHATSAPP}?text=Olá! Vim pelo site Olímpia de Verdade`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 hover:scale-110 transition z-50" title="Fale com o Luciano">
+      {/* Botão WhatsApp flutuante */}
+      <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 hover:scale-110 transition z-50">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
       </a>
     </div>
   )
 }
 
-function Home({ navigate }: { navigate: (p: string) => void }) {
+function Home({ setPage }: { setPage: (p: string) => void }) {
   return (
     <div>
-      <section className="relative bg-gradient-to-br from-cyan-400 via-blue-500 to-orange-400 text-white py-24 px-4 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-black/20" />
-        <div className="relative z-10">
-          <h1 className="text-5xl md:text-7xl font-black mb-4 drop-shadow-lg">☀️ Tudo o que você precisa para aproveitar Olímpia gastando menos.</h1>
-          <p className="text-xl md:text-2xl mb-8 drop-shadow">As melhores dicas direto de quem nasceu aqui.</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <button onClick={() => navigate('onde-ficar')} className="bg-white text-blue-700 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg">🏨 Onde Ficar</button>
-            <button onClick={() => navigate('onde-comer')} className="bg-white text-blue-700 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg">🍽️ Onde Comer</button>
-            <button onClick={() => navigate('beneficios')} className="bg-white text-blue-700 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg">🎁 Ver Benefícios</button>
-          </div>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-blue-600 via-cyan-500 to-orange-400 text-white py-20 px-4 text-center">
+        <h1 className="text-4xl md:text-6xl font-black mb-4">O guia mais completo de Olímpia-SP</h1>
+        <p className="text-lg md:text-xl mb-2">As melhores dicas de Olímpia direto de quem nasceu aqui</p>
+        <p className="text-sm opacity-80 mb-8">Apresentado por Luciano — morador, conhecedor e apaixonado pela cidade.</p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <button onClick={() => setPage('onde-ficar')} className="bg-white text-blue-700 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg">Planejar minha viagem</button>
+          <button onClick={() => setPage('cupons')} className="bg-yellow-400 text-blue-900 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg">Ver cupons de desconto</button>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto py-16 px-4">
-        <h2 className="text-4xl font-extrabold text-center mb-12 text-gray-800">Por que usar o Olímpia de Verdade?</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="text-center p-8 bg-white rounded-2xl shadow-xl hover:shadow-2xl transition border border-orange-100">
-            <span className="text-5xl">📍</span>
-            <h3 className="text-2xl font-bold mt-4">Guia Local</h3>
-            <p className="text-gray-600 mt-2">Curadoria de quem mora em Olímpia há mais de 15 anos.</p>
-          </div>
-          <div className="text-center p-8 bg-white rounded-2xl shadow-xl hover:shadow-2xl transition border border-orange-100">
-            <span className="text-5xl">💰</span>
-            <h3 className="text-2xl font-bold mt-4">Economia</h3>
-            <p className="text-gray-600 mt-2">Cupons e descontos exclusivos nos melhores lugares.</p>
-          </div>
-          <div className="text-center p-8 bg-white rounded-2xl shadow-xl hover:shadow-2xl transition border border-orange-100">
-            <span className="text-5xl">🤝</span>
-            <h3 className="text-2xl font-bold mt-4">Parceiros Verificados</h3>
-            <p className="text-gray-600 mt-2">Todos os estabelecimentos são checados pessoalmente.</p>
-          </div>
-        </div>
+      {/* Contadores */}
+      <section className="max-w-5xl mx-auto py-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div><span className="text-4xl font-black text-orange-600">200+</span><p className="text-gray-500 text-sm">Parceiros</p></div>
+        <div><span className="text-4xl font-black text-orange-600">50+</span><p className="text-gray-500 text-sm">Cupons ativos</p></div>
+        <div><span className="text-4xl font-black text-orange-600">15 anos</span><p className="text-gray-500 text-sm">Morando em Olímpia</p></div>
+        <div><span className="text-4xl font-black text-orange-600">4.9★</span><p className="text-gray-500 text-sm">Avaliação</p></div>
+      </section>
+
+      {/* Cards de acesso rápido */}
+      <section className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6 pb-12">
+        <button onClick={() => setPage('onde-ficar')} className="bg-white border border-orange-100 rounded-2xl shadow-xl p-6 text-left hover:shadow-2xl transition">
+          <span className="text-3xl">🏨</span>
+          <h3 className="text-xl font-bold mt-2">Hospedagem</h3>
+          <p className="text-gray-500 text-sm mt-1">Resorts, hotéis e pousadas verificados pelo Luciano.</p>
+        </button>
+        <button onClick={() => setPage('onde-comer')} className="bg-white border border-orange-100 rounded-2xl shadow-xl p-6 text-left hover:shadow-2xl transition">
+          <span className="text-3xl">🍽️</span>
+          <h3 className="text-xl font-bold mt-2">Gastronomia</h3>
+          <p className="text-gray-500 text-sm mt-1">Sabores autênticos escolhidos por quem é da cidade.</p>
+        </button>
+        <button onClick={() => setPage('cupons')} className="bg-white border border-orange-100 rounded-2xl shadow-xl p-6 text-left hover:shadow-2xl transition">
+          <span className="text-3xl">🎫</span>
+          <h3 className="text-xl font-bold mt-2">Cupons</h3>
+          <p className="text-gray-500 text-sm mt-1">Descontos exclusivos nos melhores lugares.</p>
+        </button>
       </section>
     </div>
   )
 }
 
-function OndeFicar({ data }: { data: Place[] }) {
+function OndeFicar({ data, filtro, setFiltro, categorias }: { data: Place[]; filtro: string; setFiltro: (f: string) => void; categorias: string[] }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-5xl font-black text-center mb-8 text-gray-800">🏨 Onde Ficar em Olímpia</h1>
+      <h1 className="text-4xl font-black text-center mb-2">Onde Ficar em Olímpia</h1>
+      <p className="text-center text-gray-500 mb-6">Resorts, hotéis e pousadas verificados pelo Luciano.</p>
+      <div className="flex flex-wrap justify-center gap-2 mb-8">
+        {categorias.map(c => (
+          <button key={c} onClick={() => setFiltro(c)} className={`px-4 py-2 rounded-full text-sm font-semibold ${filtro === c ? 'bg-orange-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{c}</button>
+        ))}
+      </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.map((item, i) => (
           <div key={i} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition border border-orange-100">
-            <img src={item.imagem} alt={item.nome} className="h-56 w-full object-cover" />
+            <div className="relative">
+              <img src={item.imagem} alt={item.nome} className="h-56 w-full object-cover" />
+              {item.verificado && <span className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">✓ Parceiro Verificado</span>}
+            </div>
             <div className="p-5">
               <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">{item.categoria}</span>
-              <h3 className="text-2xl font-bold mt-2">{item.nome}</h3>
-              <p className="text-gray-600 text-sm mt-1">{item.descricao}</p>
-              {item.preco && <p className="text-xl font-extrabold text-orange-700 mt-2">{item.preco}</p>}
+              <h3 className="text-xl font-bold mt-2">{item.nome}</h3>
+              <p className="text-gray-500 text-sm mt-1">{item.descricao}</p>
+              <p className="text-xl font-black text-orange-600 mt-2">{item.preco}</p>
               <a href={`https://wa.me/${WHATSAPP}?text=Olá! Tenho interesse em ${item.nome}`} target="_blank" rel="noopener noreferrer" className="mt-4 block text-center bg-green-500 text-white py-3 rounded-full font-bold hover:bg-green-600 transition">💬 Chamar no WhatsApp</a>
             </div>
           </div>
@@ -159,20 +249,30 @@ function OndeFicar({ data }: { data: Place[] }) {
   )
 }
 
-function OndeComer({ data }: { data: Food[] }) {
+function OndeComer({ data, filtro, setFiltro, categorias }: { data: Food[]; filtro: string; setFiltro: (f: string) => void; categorias: string[] }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-5xl font-black text-center mb-8 text-gray-800">🍽️ Onde Comer em Olímpia</h1>
+      <h1 className="text-4xl font-black text-center mb-2">Onde Comer em Olímpia</h1>
+      <p className="text-center text-gray-500 mb-6">Sabores autênticos escolhidos por quem é da cidade.</p>
+      <div className="flex flex-wrap justify-center gap-2 mb-8">
+        {categorias.map(c => (
+          <button key={c} onClick={() => setFiltro(c)} className={`px-4 py-2 rounded-full text-sm font-semibold ${filtro === c ? 'bg-orange-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>{c}</button>
+        ))}
+      </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.map((item, i) => (
           <div key={i} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition border border-orange-100">
-            <img src={item.imagem} alt={item.nome} className="h-56 w-full object-cover" />
+            <div className="relative">
+              <img src={item.imagem} alt={item.nome} className="h-56 w-full object-cover" />
+              {item.verificado && <span className="absolute top-3 left-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">✓ Parceiro Verificado</span>}
+              {item.selo && <span className="absolute top-3 right-3 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">{item.selo}</span>}
+            </div>
             <div className="p-5">
               <span className="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 rounded-full">{item.categoria}</span>
-              <h3 className="text-2xl font-bold mt-2">{item.nome}</h3>
-              <p className="text-gray-600 text-sm mt-1">{item.descricao}</p>
-              {item.preco && <p className="text-xl font-extrabold text-red-700 mt-2">{item.preco}</p>}
-              <a href={`https://wa.me/${WHATSAPP}?text=Olá! Gostaria de saber mais sobre ${item.nome}`} target="_blank" rel="noopener noreferrer" className="mt-4 block text-center bg-green-500 text-white py-3 rounded-full font-bold hover:bg-green-600 transition">💬 Reservar / Info</a>
+              <h3 className="text-xl font-bold mt-2">{item.nome}</h3>
+              <p className="text-gray-500 text-sm mt-1">{item.descricao}</p>
+              <p className="text-xl font-black text-red-600 mt-2">{item.preco}</p>
+              <a href={`https://wa.me/${WHATSAPP}?text=Olá! Gostaria de saber mais sobre ${item.nome}`} target="_blank" rel="noopener noreferrer" className="mt-4 block text-center bg-green-500 text-white py-3 rounded-full font-bold hover:bg-green-600 transition">💬 Chamar no WhatsApp</a>
             </div>
           </div>
         ))}
@@ -181,86 +281,137 @@ function OndeComer({ data }: { data: Food[] }) {
   )
 }
 
-function Operadoras({ data }: { data: Operator[] }) {
+function Cupons({ data }: { data: Cupom[] }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-5xl font-black text-center mb-8 text-gray-800">🚐 Operadoras Parceiras</h1>
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {data.map((op, i) => (
-          <div key={i} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition border border-orange-100">
-            <img src={op.imagem} alt={op.nome} className="h-40 w-full object-cover" />
-            <div className="p-5 text-center">
-              <span className="text-4xl">{op.logo}</span>
-              <h3 className="text-xl font-bold mt-2">{op.nome}</h3>
-              <p className="text-gray-600 text-sm mt-1">{op.especialidade}</p>
-              <a href={`https://wa.me/${op.whatsapp}?text=Olá! Quero um orçamento com ${op.nome}`} target="_blank" rel="noopener noreferrer" className="mt-4 block text-center bg-green-500 text-white py-3 rounded-full font-bold hover:bg-green-600 transition">💬 Pedir Orçamento</a>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function Beneficios({ data }: { data: Benefit[] }) {
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-5xl font-black text-center mb-8 text-gray-800">🎁 Clube de Benefícios</h1>
+      <h1 className="text-4xl font-black text-center mb-2">Cupons de Desconto Exclusivos</h1>
+      <p className="text-center text-gray-500 mb-8">Sua carteira de cupons para economizar em Olímpia.</p>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.map((b, i) => (
-          <div key={i} className="bg-white rounded-2xl shadow-xl p-6 flex items-start gap-4 hover:shadow-2xl transition border border-orange-100">
-            <span className="text-4xl">{b.icone}</span>
-            <div>
-              <h3 className="text-xl font-bold">{b.titulo}</h3>
-              <p className="text-gray-600 mt-1">{b.descricao}</p>
-            </div>
+        {data.map((c, i) => (
+          <div key={i} className={`bg-gradient-to-br ${c.cor} text-white rounded-2xl shadow-xl p-6 relative overflow-hidden`}>
+            <div className="absolute top-0 right-0 bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-bl-xl">Parceiro</div>
+            <span className="text-3xl font-black">{c.nome}</span>
+            <h3 className="text-xl font-bold mt-2">{c.parceiro}</h3>
+            <p className="text-lg font-semibold mt-2">{c.desconto}</p>
+            <p className="text-3xl font-black mt-3 tracking-wider">{c.codigo}</p>
+            <p className="text-xs opacity-80 mt-2">Válido até {c.valido}</p>
+            <a href={`https://wa.me/${WHATSAPP}?text=Quero resgatar o cupom ${c.codigo}`} target="_blank" rel="noopener noreferrer" className="mt-4 block text-center bg-white text-gray-900 py-2 rounded-full font-bold hover:bg-yellow-300 transition">Resgatar cupom</a>
           </div>
         ))}
-      </div>
-      <div className="max-w-md mx-auto mt-12 bg-white rounded-2xl shadow-2xl p-8 border border-orange-200">
-        <h2 className="text-3xl font-black text-center mb-4">Receba novos cupons</h2>
-        <input type="text" placeholder="Seu nome" className="w-full border-2 border-orange-200 p-3 rounded-xl mb-3 focus:outline-orange-500" />
-        <input type="text" placeholder="WhatsApp" className="w-full border-2 border-orange-200 p-3 rounded-xl mb-3 focus:outline-orange-500" />
-        <input type="email" placeholder="E-mail" className="w-full border-2 border-orange-200 p-3 rounded-xl mb-4 focus:outline-orange-500" />
-        <button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-full font-bold text-lg hover:from-orange-600 hover:to-amber-600 transition shadow-lg">Quero cupons grátis</button>
       </div>
     </div>
   )
 }
 
-function SejaParceiro({ planos }: { planos: Plan[] }) {
+function Eventos({ data }: { data: Evento[] }) {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-5xl font-black text-center mb-4 text-gray-800">💰 Seja um Parceiro</h1>
-      <p className="text-center text-gray-600 mb-12 text-lg">Anuncie para milhares de turistas que visitam Olímpia</p>
-      <div className="grid md:grid-cols-3 gap-8">
-        {planos.map((plan, i) => (
-          <div key={i} className={`bg-white rounded-2xl shadow-xl p-8 flex flex-col border-2 ${plan.popular ? 'border-orange-500 scale-105' : 'border-orange-100'}`}>
+    <div className="max-w-5xl mx-auto px-4 py-12">
+      <h1 className="text-4xl font-black text-center mb-8">Eventos em Olímpia</h1>
+      <div className="space-y-4">
+        {data.map((e, i) => (
+          <div key={i} className="bg-white border border-orange-100 rounded-2xl shadow-lg p-5 flex items-center gap-4 hover:shadow-xl transition">
+            <div className="text-center min-w-[60px]">
+              <p className="text-xs font-bold text-orange-600">{e.mes}</p>
+              <p className="text-3xl font-black">{e.dia}</p>
+            </div>
+            <div className="flex-1">
+              <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">{e.categoria}</span>
+              <h3 className="text-lg font-bold mt-1">{e.titulo}</h3>
+              <p className="text-sm text-gray-500">{e.local} · {e.hora}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Blog({ data }: { data: Post[] }) {
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      <h1 className="text-4xl font-black text-center mb-8">Dicas, Roteiros e Novidades</h1>
+      <div className="grid md:grid-cols-3 gap-6">
+        {data.map((p, i) => (
+          <div key={i} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition border border-orange-100">
+            <img src={p.imagem} alt={p.titulo} className="h-48 w-full object-cover" />
+            <div className="p-5">
+              <span className="text-xs font-bold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">{p.categoria}</span>
+              <h3 className="text-lg font-bold mt-2">{p.titulo}</h3>
+              <p className="text-sm text-gray-500 mt-1">{p.descricao}</p>
+              <button className="mt-3 text-orange-600 font-bold text-sm hover:underline">Ler mais →</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Videos({ data }: { data: Video[] }) {
+  return (
+    <div className="max-w-6xl mx-auto px-4 py-12">
+      <h1 className="text-4xl font-black text-center mb-8">Vídeos do Olímpia de Verdade</h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {data.map((v, i) => (
+          <div key={i} className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition border border-orange-100">
+            <div className="relative">
+              <img src={v.thumbnail} alt={v.titulo} className="h-40 w-full object-cover" />
+              <span className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">{v.duracao}</span>
+            </div>
+            <div className="p-4">
+              <h3 className="font-bold text-sm">{v.titulo}</h3>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Sobre() {
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <h1 className="text-4xl font-black text-center mb-8">Sobre o Luciano</h1>
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-orange-100 text-center">
+        <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full mx-auto flex items-center justify-center text-white text-5xl font-black">LZ</div>
+        <h2 className="text-2xl font-bold mt-4">Luciano Zangirolami</h2>
+        <p className="text-gray-500 text-sm">Piloto, viajante e olimpiense de coração.</p>
+        <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+          Sou Luciano Zangirolami, piloto automobilístico profissional. A vida nas pistas me levou a correr e viajar pelo mundo inteiro — conheci dezenas de países, culturas e destinos turísticos. E é justamente por isso que posso garantir com toda a certeza: Olímpia é uma surpresa pra quem nunca veio.
+        </p>
+        <p className="italic text-gray-700 font-semibold mt-4">"Já corri pelo mundo todo. E posso afirmar: Olímpia é uma das melhores surpresas que você pode ter no Brasil."</p>
+        <div className="mt-6 flex justify-center gap-4">
+          <a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="bg-green-500 text-white px-6 py-3 rounded-full font-bold hover:bg-green-600 transition">💬 WhatsApp</a>
+          <a href={`mailto:${EMAIL}`} className="bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-bold hover:bg-gray-300 transition">📧 E-mail</a>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Parceiro() {
+  return (
+    <div className="max-w-5xl mx-auto px-4 py-12">
+      <h1 className="text-4xl font-black text-center mb-4">Para empresas</h1>
+      <p className="text-center text-gray-500 mb-8">Anuncie para milhares de turistas que visitam Olímpia</p>
+      <div className="grid md:grid-cols-3 gap-6">
+        {[
+          { nome: 'Básico', preco: 'R$ 99/mês', beneficios: ['Ficha no diretório', '1 foto', 'Contato direto', 'Estatísticas mensais'] },
+          { nome: 'Profissional', preco: 'R$ 299/mês', beneficios: ['Ficha destacada', 'Até 10 fotos', 'Cupom no app', '1 post no blog', 'Suporte prioritário'], popular: true },
+          { nome: 'Premium', preco: 'R$ 699/mês', beneficios: ['Top do diretório', 'Fotos ilimitadas', 'Cupons + vídeo', '3 posts no blog', 'Vídeo no YouTube', 'Gestor dedicado'] },
+        ].map((plan, i) => (
+          <div key={i} className={`bg-white rounded-2xl shadow-xl p-6 border-2 flex flex-col ${plan.popular ? 'border-orange-500 scale-105' : 'border-orange-100'}`}>
             {plan.popular && <span className="text-sm font-black text-orange-600 uppercase mb-2">⭐ Mais Popular</span>}
-            <h3 className="text-3xl font-black">{plan.nome}</h3>
-            <p className="text-4xl font-black mt-4 text-orange-600">{plan.preco}</p>
-            <ul className="mt-6 flex-1 space-y-3">
+            <h3 className="text-2xl font-black">{plan.nome}</h3>
+            <p className="text-3xl font-black text-orange-600 mt-2">{plan.preco}</p>
+            <ul className="mt-4 flex-1 space-y-2">
               {plan.beneficios.map((b, j) => (
-                <li key={j} className="flex items-center gap-2 text-gray-700"><span className="text-green-500 text-xl">✔</span> {b}</li>
+                <li key={j} className="flex items-center gap-2 text-sm text-gray-600"><span className="text-green-500">✔</span> {b}</li>
               ))}
             </ul>
-            <a href={`https://wa.me/${WHATSAPP}?text=Quero ser parceiro no plano ${plan.nome}`} target="_blank" rel="noopener noreferrer" className="mt-8 block text-center bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-full font-bold text-lg hover:from-orange-600 hover:to-amber-600 transition shadow-lg">💬 Quero anunciar</a>
+            <a href={`https://wa.me/${WHATSAPP}?text=Quero ser parceiro no plano ${plan.nome}`} target="_blank" rel="noopener noreferrer" className="mt-6 block text-center bg-orange-600 text-white py-3 rounded-full font-bold hover:bg-orange-700 transition">Quero anunciar</a>
           </div>
         ))}
-      </div>
-    </div>
-  )
-}
-
-function Contato() {
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-5xl font-black text-center mb-8 text-gray-800">📞 Fale Conosco</h1>
-      <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-2xl p-8 border border-orange-200">
-        <input type="text" placeholder="Seu nome" className="w-full border-2 border-orange-200 p-3 rounded-xl mb-3 focus:outline-orange-500" />
-        <input type="text" placeholder="WhatsApp" className="w-full border-2 border-orange-200 p-3 rounded-xl mb-3 focus:outline-orange-500" />
-        <textarea placeholder="Sua mensagem" rows={4} className="w-full border-2 border-orange-200 p-3 rounded-xl mb-4 focus:outline-orange-500" />
-        <a href={`https://wa.me/${WHATSAPP}?text=Olá, vim pelo site Olímpia de Verdade!`} target="_blank" rel="noopener noreferrer" className="block text-center bg-green-500 text-white py-4 rounded-full font-bold text-lg hover:bg-green-600 transition shadow-lg">💬 Enviar via WhatsApp</a>
       </div>
     </div>
   )
