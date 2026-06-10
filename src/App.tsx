@@ -177,42 +177,98 @@ function App() {
 function Home({ setPage }: { setPage: (p: string) => void }) {
   return (
     <div>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-blue-600 via-cyan-500 to-orange-400 text-white py-20 px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-black mb-4">O guia mais completo de Olímpia-SP</h1>
-        <p className="text-lg md:text-xl mb-2">As melhores dicas de Olímpia direto de quem nasceu aqui</p>
-        <p className="text-sm opacity-80 mb-8">Apresentado por Luciano — morador, conhecedor e apaixonado pela cidade.</p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <button onClick={() => setPage('onde-ficar')} className="bg-white text-blue-700 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg">Planejar minha viagem</button>
-          <button onClick={() => setPage('cupons')} className="bg-yellow-400 text-blue-900 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg">Ver cupons de desconto</button>
+      {/* Hero com imagem de fundo */}
+      <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200"
+          alt="Thermas dos Laranjais - Olímpia"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+        <div className="relative z-10 text-center px-4 max-w-4xl">
+          <span className="inline-block bg-orange-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4">🌴 O guia mais completo de Olímpia-SP</span>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-4 drop-shadow-2xl leading-tight">
+            As melhores dicas de Olímpia direto de quem nasceu aqui
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 mb-8 drop-shadow-lg">
+            Apresentado por Luciano — morador, conhecedor e apaixonado pela cidade.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <button onClick={() => setPage('onde-ficar')} className="bg-white text-blue-900 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg shadow-xl hover:shadow-2xl transform hover:scale-105">
+              🏨 Planejar minha viagem
+            </button>
+            <button onClick={() => setPage('cupons')} className="bg-yellow-400 text-blue-900 font-bold px-8 py-4 rounded-full hover:bg-yellow-300 transition text-lg shadow-xl hover:shadow-2xl transform hover:scale-105">
+              🎫 Ver cupons de desconto
+            </button>
+          </div>
+        </div>
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <svg className="w-8 h-8 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
         </div>
       </section>
 
       {/* Contadores */}
       <section className="max-w-5xl mx-auto py-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div><span className="text-4xl font-black text-orange-600">200+</span><p className="text-gray-500 text-sm">Parceiros</p></div>
-        <div><span className="text-4xl font-black text-orange-600">50+</span><p className="text-gray-500 text-sm">Cupons ativos</p></div>
-        <div><span className="text-4xl font-black text-orange-600">15 anos</span><p className="text-gray-500 text-sm">Morando em Olímpia</p></div>
-        <div><span className="text-4xl font-black text-orange-600">4.9★</span><p className="text-gray-500 text-sm">Avaliação</p></div>
+        <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+          <span className="text-4xl font-black text-orange-600">200+</span>
+          <p className="text-gray-500 text-sm mt-1">Parceiros</p>
+        </div>
+        <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+          <span className="text-4xl font-black text-orange-600">50+</span>
+          <p className="text-gray-500 text-sm mt-1">Cupons ativos</p>
+        </div>
+        <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+          <span className="text-4xl font-black text-orange-600">15 anos</span>
+          <p className="text-gray-500 text-sm mt-1">Morando em Olímpia</p>
+        </div>
+        <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+          <span className="text-4xl font-black text-orange-600">4.9★</span>
+          <p className="text-gray-500 text-sm mt-1">Avaliação</p>
+        </div>
       </section>
 
       {/* Cards de acesso rápido */}
-      <section className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6 pb-12">
-        <button onClick={() => setPage('onde-ficar')} className="bg-white border border-orange-100 rounded-2xl shadow-xl p-6 text-left hover:shadow-2xl transition">
-          <span className="text-3xl">🏨</span>
-          <h3 className="text-xl font-bold mt-2">Hospedagem</h3>
-          <p className="text-gray-500 text-sm mt-1">Resorts, hotéis e pousadas verificados pelo Luciano.</p>
+      <section className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6 pb-16">
+        <button onClick={() => setPage('onde-ficar')} className="group relative h-64 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600" alt="Hospedagem" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <span className="text-3xl">🏨</span>
+            <h3 className="text-2xl font-bold mt-2">Hospedagem</h3>
+            <p className="text-sm text-white/80 mt-1">Resorts, hotéis e pousadas verificados pelo Luciano.</p>
+          </div>
         </button>
-        <button onClick={() => setPage('onde-comer')} className="bg-white border border-orange-100 rounded-2xl shadow-xl p-6 text-left hover:shadow-2xl transition">
-          <span className="text-3xl">🍽️</span>
-          <h3 className="text-xl font-bold mt-2">Gastronomia</h3>
-          <p className="text-gray-500 text-sm mt-1">Sabores autênticos escolhidos por quem é da cidade.</p>
+        <button onClick={() => setPage('onde-comer')} className="group relative h-64 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600" alt="Gastronomia" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <span className="text-3xl">🍽️</span>
+            <h3 className="text-2xl font-bold mt-2">Gastronomia</h3>
+            <p className="text-sm text-white/80 mt-1">Sabores autênticos escolhidos por quem é da cidade.</p>
+          </div>
         </button>
-        <button onClick={() => setPage('cupons')} className="bg-white border border-orange-100 rounded-2xl shadow-xl p-6 text-left hover:shadow-2xl transition">
-          <span className="text-3xl">🎫</span>
-          <h3 className="text-xl font-bold mt-2">Cupons</h3>
-          <p className="text-gray-500 text-sm mt-1">Descontos exclusivos nos melhores lugares.</p>
+        <button onClick={() => setPage('cupons')} className="group relative h-64 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition">
+          <img src="https://images.unsplash.com/photo-1553729459-afe8a2f19f7c?w=600" alt="Cupons" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <span className="text-3xl">🎫</span>
+            <h3 className="text-2xl font-bold mt-2">Cupons</h3>
+            <p className="text-sm text-white/80 mt-1">Descontos exclusivos nos melhores lugares.</p>
+          </div>
         </button>
+      </section>
+
+      {/* Galeria de Olímpia */}
+      <section className="bg-gray-50 py-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-3xl font-black text-center mb-8">Conheça Olímpia</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400" alt="Parque aquático" className="rounded-2xl h-48 w-full object-cover shadow-lg hover:scale-105 transition" />
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=400" alt="Piscina" className="rounded-2xl h-48 w-full object-cover shadow-lg hover:scale-105 transition" />
+            <img src="https://images.unsplash.com/photo-1518384511164-5d0d4c6d5b69?w=400" alt="Diversão" className="rounded-2xl h-48 w-full object-cover shadow-lg hover:scale-105 transition" />
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400" alt="Olímpia" className="rounded-2xl h-48 w-full object-cover shadow-lg hover:scale-105 transition" />
+          </div>
+        </div>
       </section>
     </div>
   )
