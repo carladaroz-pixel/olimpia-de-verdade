@@ -180,7 +180,7 @@ function Home({ setPage }: { setPage: (p: string) => void }) {
       {/* Hero com imagem de fundo */}
       <section className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200"
+          src=https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1200
           alt="Thermas dos Laranjais - Olímpia"
           className="absolute inset-0 w-full h-full object-cover"
         />
