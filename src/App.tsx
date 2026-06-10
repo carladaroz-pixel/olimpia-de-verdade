@@ -85,7 +85,7 @@ export default function App() {
 function Home({ setPage }: { setPage: (p: string) => void }) {
   return (
     <div>
-      <section className="relative bg-cover bg-center py-32 px-4 text-white text-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200')" }}
+      <section className="relative bg-cover bg-center py-32 px-4 text-white text-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200')" }}>
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative z-10">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Tudo o que você precisa para aproveitar Olímpia gastando menos.</h1>
